@@ -31,25 +31,32 @@ class OrtEnv {
   }
 
   /// Initialize the onnx runtime environment.
-  void init(
-      {OrtLoggingLevel level = OrtLoggingLevel.warning,
-      String logId = 'DartOnnxRuntime',
-      OrtThreadingOptions? options}) {
+  void init({
+    OrtLoggingLevel level = OrtLoggingLevel.warning,
+    String logId = 'DartOnnxRuntime',
+    OrtThreadingOptions? options,
+  }) {
     final pp = calloc<ffi.Pointer<bg.OrtEnv>>();
     bg.OrtStatusPtr statusPtr;
     if (options == null) {
       statusPtr = _ortApiPtr.ref.CreateEnv.asFunction<
-              bg.OrtStatusPtr Function(int, ffi.Pointer<ffi.Char>,
-                  ffi.Pointer<ffi.Pointer<bg.OrtEnv>>)>()(
-          level.value, logId.toNativeUtf8().cast<ffi.Char>(), pp);
+          bg.OrtStatusPtr Function(
+            int,
+            ffi.Pointer<ffi.Char>,
+            ffi.Pointer<ffi.Pointer<bg.OrtEnv>>,
+          )>()(level.value, logId.toNativeUtf8().cast<ffi.Char>(), pp);
     } else {
       statusPtr = _ortApiPtr.ref.CreateEnvWithGlobalThreadPools.asFunction<
-              bg.OrtStatusPtr Function(
-                  int,
-                  ffi.Pointer<ffi.Char>,
-                  ffi.Pointer<bg.OrtThreadingOptions>,
-                  ffi.Pointer<ffi.Pointer<bg.OrtEnv>>)>()(
-          level.value, logId.toNativeUtf8().cast<ffi.Char>(), options._ptr, pp);
+          bg.OrtStatusPtr Function(
+              int,
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<bg.OrtThreadingOptions>,
+              ffi.Pointer<ffi.Pointer<bg.OrtEnv>>)>()(
+        level.value,
+        logId.toNativeUtf8().cast<ffi.Char>(),
+        options._ptr,
+        pp,
+      );
     }
     OrtStatus.checkOrtStatus(statusPtr);
     _ptr = pp.value;

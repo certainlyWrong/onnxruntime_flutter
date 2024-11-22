@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "example"
+		}
+	],
+	"settings": {
+		"makefile.configureOnOpen": false
+	}
+}

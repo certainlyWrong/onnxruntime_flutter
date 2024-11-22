@@ -245,7 +245,7 @@ class OrtSession {
             .instance.ortApiPtr.ref.ModelMetadataLookupCustomMetadataMap
             .asFunction<
                 bg.OrtStatusPtr Function(
-                    ffi.Pointer<bg.OrtModelMetadata> model_metadata,
+                    ffi.Pointer<bg.OrtModelMetadata> modelMetadata,
                     ffi.Pointer<bg.OrtAllocator> allocator,
                     ffi.Pointer<ffi.Char> key,
                     ffi.Pointer<ffi.Pointer<ffi.Char>> value)>()(
@@ -303,10 +303,12 @@ class OrtSessionOptions {
 
   /// Sets the number of inter op threads.
   void setInterOpNumThreads(int numThreads) {
-    final statusPtr = OrtEnv.instance.ortApiPtr.ref.SetInterOpNumThreads
-        .asFunction<
+    final statusPtr =
+        OrtEnv.instance.ortApiPtr.ref.SetInterOpNumThreads.asFunction<
             bg.OrtStatusPtr Function(
-                ffi.Pointer<bg.OrtSessionOptions>, int)>()(_ptr, numThreads);
+              ffi.Pointer<bg.OrtSessionOptions>,
+              int,
+            )>()(_ptr, numThreads);
     OrtStatus.checkOrtStatus(statusPtr);
   }
 
